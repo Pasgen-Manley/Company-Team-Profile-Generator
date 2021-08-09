@@ -7,7 +7,7 @@ const util = require('util');
 const fs = require('fs');
 
 const writeFileAsync = util.promisify(fs.writeFile);
-const OUTPUT_DIR = path.resolve(__dirname, 'output');
+const OUTPUT_DIR = path.resolve(__dirname, 'generatedProfile');
 const outputPath = path.join(OUTPUT_DIR, 'team.html');
 
 const render = require('./lib/render');
