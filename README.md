@@ -13,6 +13,9 @@
 
   ## Installation
   Clone the Github repository to your console. Navigate to the correct folder in your console. Then install inquirer into the console by inputing 'npm install inquirer'.
+  
+
+https://user-images.githubusercontent.com/82016491/128725669-a8923c4c-a8e5-46bc-9b9c-fc368465c6c8.mp4
 
   ## Usage
   Follow the command line promps given to you by the terminal.
