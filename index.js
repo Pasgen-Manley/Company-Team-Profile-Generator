@@ -126,11 +126,6 @@ const engineerQuestions = [
     message: "Please enter Engineer's GitHub profile name",
     name: 'GitHubName',
   },
-  {
-    type: 'input',
-    message: "Please enter Engineer's GitHub address.",
-    name: 'GitHubAddress',
-  },
 ];
 
 // Questions asked about the Intern
@@ -215,7 +210,7 @@ function createTeamLoop() {
     if (teamRole.teamMemberRoleType === 'Engineer') {
       console.log('Please enter corresponding information about your Engineer.');
       inquirer.prompt(engineerQuestions).then((buildEngProfile) => {
-        let engineer = new Engineer(buildEngProfile.EngineerName, buildEngProfile.EngineerID, buildEngProfile.EngineerEmail, buildEngProfile.GitHubName, buildEngProfile.GitHubAddress);
+        let engineer = new Engineer(buildEngProfile.EngineerName, buildEngProfile.EngineerID, buildEngProfile.EngineerEmail, buildEngProfile.GitHubName);
         teamMemberArr.push(engineer);
         teamSize();
       });
