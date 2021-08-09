@@ -91,7 +91,7 @@ const engineerQuestions = [
   {
     type: 'input',
     message: "What is the name of the Engineer?",
-    name: 'internName',
+    name: 'EngineerName',
   },
   {
     type: 'input',
@@ -110,7 +110,7 @@ const engineerQuestions = [
   {
     type: 'input',
     message: "Please enter in Engineer's email address.",
-    name: 'engineerEmail',
+    name: 'EngineerEmail',
     validate: emailInput => {
       email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput);
       if (email) {
@@ -134,16 +134,16 @@ const engineerQuestions = [
 ];
 
 // Questions asked about the Intern
-const engineerQuestions = [
+const internQuestions = [
   {
     type: 'input',
     message: "What is the Intern's name?",
-    name: 'engineerName',
+    name: 'InternName',
   },
   {
     type: 'input',
     message: "What is the Intern's employee ID number?",
-    name: 'internID',
+    name: 'InternID',
     validate: internNum => {
       numbers = /^[0-9]+$/.test(internNum);
       if (numbers) {
@@ -157,7 +157,7 @@ const engineerQuestions = [
   {
     type: 'input',
     message: "Please enter in Intern's email address.",
-    name: 'internEmail',
+    name: 'InternEmail',
     validate: emailInput => {
       email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailInput);
       if (email) {
@@ -171,6 +171,74 @@ const engineerQuestions = [
   {
     type: 'input',
     message: "What it the name of the Intern's school?",
-    name: 'internSchool',
+    name: 'InternSchool',
   },
 ];
+
+// Function That begins the application
+function appIntroduction() {
+  inquirer.prompt(introQuestion).then((startApp) => {
+    if (startApp.introduction === 'Yes') {
+      console.log('Please enter corresponding information about your project manager.');
+      managerInformation();
+    } else {
+      console.log('-------------Application Closed-------------');
+      return;
+    };
+  }); 
+};
+
+//Function that builds the manager profile based off the answers given from the managerQuestions array
+function managerInformation() {
+  inquirer.prompt(managerQuestions).then((buildManProfile) => {
+    let manager = new Manager(buildManProfile.managerName, buildManProfile.managerID, buildManProfile.managerEmail, buildManProfile.officeNumber);
+    teamMemberArr.push(manager);
+
+    teamSize();
+  });
+};
+
+//Functions that to see if you want to add a team member
+function teamSize() {
+  inquirer.prompt(endManagerQuestions).then((addTeam) => {
+    if (addTeam.addTeam === 'Yes') {
+      createTeamLoop();
+    } if (addTeam.addTeam === 'No') {
+      renderDocument(teamMemberArr);
+    }
+  });
+};
+
+//Creates a profile or either and Engineer or an Intern if chosen in the teamMemberRolePick question array
+function createTeamLoop() {
+  inquirer.prompt(teamMemberRolePick).then((teamRole) => {
+    if (teamRole.teamMemberRoleType === 'Engineer') {
+      console.log('Please enter corresponding information about your Engineer.');
+      inquirer.prompt(engineerQuestions).then((buildEngProfile) => {
+        let engineer = new Engineer(buildEngProfile.EngineerName, buildEngProfile.EngineerID, buildEngProfile.EngineerEmail, buildEngProfile.GitHubName, buildEngProfile.GitHubAddress);
+        teamMemberArr.push(engineer);
+        teamSize();
+      });
+    } else if (teamRole.teamMemberRoleType === 'Intern') {
+      console.log('Please enter corresponding information about your Intern.');
+      inquirer.prompt(internQuestions).then((buildIntProfile) => {
+        let intern = new Intern(buildIntProfile.InternName, buildIntProfile.InternID, buildIntProfile.InternEmail, buildIntProfile.InternSchool);
+        teamMemberArr.push(intern);
+        teamSize();
+      })
+    }
+  });
+};
+
+// Function that writes the team profile information to HTML document.
+async function renderDocument(document) {
+  const profilePage = render(document);
+
+  await writeFileAsync(outputPath, profilePage).then(function() {
+    console.log('-------------Team Profile Created-------------');
+  });
+};
+
+
+//Calls function to begin application
+appIntroduction();
